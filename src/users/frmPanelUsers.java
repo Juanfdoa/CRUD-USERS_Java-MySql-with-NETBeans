@@ -25,6 +25,8 @@ public class frmPanelUsers extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPopupMenu1 = new javax.swing.JPopupMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
@@ -45,6 +47,14 @@ public class frmPanelUsers extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableUser = new javax.swing.JTable();
+
+        jMenuItem1.setText("Delete");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(jMenuItem1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -104,6 +114,11 @@ public class frmPanelUsers extends javax.swing.JFrame {
         });
 
         btnUpdate.setText("Update");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -187,6 +202,12 @@ public class frmPanelUsers extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tableUser.setComponentPopupMenu(jPopupMenu1);
+        tableUser.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableUserMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tableUser);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -285,6 +306,58 @@ public class frmPanelUsers extends javax.swing.JFrame {
       } 
     }//GEN-LAST:event_btnRegisterActionPerformed
 
+    private void tableUserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableUserMouseClicked
+        int fila = this.tableUser.getSelectedRow();
+        this.txtId.setText(this.tableUser.getValueAt(fila, 0).toString());
+        this.txtName.setText(this.tableUser.getValueAt(fila, 1).toString());
+        this.txtSurname.setText(this.tableUser.getValueAt(fila, 2).toString());
+        this.txtEmail.setText(this.tableUser.getValueAt(fila, 3).toString());
+        this.txtDocument.setText(this.tableUser.getValueAt(fila, 4).toString());
+        this.txtDate.setText(this.tableUser.getValueAt(fila, 5).toString());
+    }//GEN-LAST:event_tableUserMouseClicked
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        try
+        {
+            PreparedStatement ps = cn.prepareStatement
+        ("UPDATE user SET Names ='" + txtName.getText() +"',Surnames='" + txtSurname.getText() + "',Email='" + txtEmail.getText() + "',DocumentNumber='" + txtDocument.getText() +"',BirthDate='" + txtDate.getText() + "' WHERE Id = '" + txtId.getText() + "' ");
+            
+            int indice = ps.executeUpdate();
+            
+            if(indice > 0){
+             JOptionPane.showMessageDialog(rootPane, "DATA WAS SUCCESSFULLY UPDATED");
+             cleanPage();
+             showData();
+            }else{
+                JOptionPane.showMessageDialog(null, "NO ROW WAS SELECTED");
+            }
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, "ERROR TO UPDATED THE INFORMATION" + e);
+        }
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+       if(JOptionPane.showConfirmDialog(null, "ARE YOU SURE YOU WANT TO DELETE THIS RECORD")== 0)
+       {
+           try
+           {
+               PreparedStatement ps = cn.prepareStatement("DELETE FROM user WHERE Id = '" + txtId.getText() +"'");
+               int indice = ps.executeUpdate();
+               if(indice > 0)
+               {
+                   showData();
+                   cleanPage();
+               }else
+               {
+                   System.out.println("YOU HAVE NOT SELECTED ANY RECORD");
+               }
+           }catch(SQLException e)
+           {
+               System.out.println("ERROR TO DELETE DATA " + e);
+           }
+       }
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -330,9 +403,11 @@ public class frmPanelUsers extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tableUser;
     private javax.swing.JTextField txtDate;
